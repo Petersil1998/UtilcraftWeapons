@@ -4,6 +4,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.petersil98.utilcraft.items.ModItems;
 import net.petersil98.utilcraft_weapons.UtilcraftWeapons;
+import net.petersil98.utilcraft_weapons.effects.UtilcraftWeaponsEffects;
 import net.petersil98.utilcraft_weapons.items.UtilcraftWeaponsItems;
 
 public class Languages {
@@ -26,6 +27,10 @@ public class Languages {
         protected void addTranslations() {
             add(UtilcraftWeaponsItems.ASSASSINS_KNIFE, "Assassin's Knife");
             add(UtilcraftWeaponsItems.SNIPER_RIFLE, "Sniper Rifle");
+            add(UtilcraftWeaponsEffects.STEALTH, "Stealth");
+            add(UtilcraftWeaponsItems.BULLET_ITEM,"Bullet");
+            add(String.format("%s.kill.sniper", UtilcraftWeapons.MOD_ID), "%s got sniped by %s");
+            add(String.format("%s.kill.knife", UtilcraftWeapons.MOD_ID), "%s got stabbed by %s");
         }
     }
 

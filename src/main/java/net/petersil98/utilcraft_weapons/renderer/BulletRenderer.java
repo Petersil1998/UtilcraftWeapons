@@ -12,13 +12,14 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix3f;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
+import net.petersil98.utilcraft_weapons.UtilcraftWeapons;
 import net.petersil98.utilcraft_weapons.entities.BulletEntity;
 
 import javax.annotation.Nonnull;
 
 public class BulletRenderer<T extends BulletEntity> extends EntityRenderer<T> {
 
-    public static final ResourceLocation RES_SPECTRAL_ARROW = new ResourceLocation("textures/entity/projectiles/spectral_arrow.png");
+    public static final ResourceLocation RES_BULLET = new ResourceLocation(UtilcraftWeapons.MOD_ID, "textures/entity/projectiles/bullet.png");
 
     public BulletRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn);
@@ -66,6 +67,6 @@ public class BulletRenderer<T extends BulletEntity> extends EntityRenderer<T> {
      */
     @Nonnull
     public ResourceLocation getEntityTexture(@Nonnull T entity) {
-        return RES_SPECTRAL_ARROW;
+        return RES_BULLET;
     }
 }

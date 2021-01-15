@@ -10,6 +10,7 @@ import net.minecraft.util.CooldownTracker;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.petersil98.utilcraft_weapons.UtilcraftWeapons;
+import net.petersil98.utilcraft_weapons.data.capabilities.stealth.CapabilityStealth;
 import net.petersil98.utilcraft_weapons.effects.UtilcraftWeaponsEffects;
 
 import javax.annotation.Nonnull;
@@ -30,8 +31,7 @@ public class AssassinsKnife extends SwordItem {
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
         CooldownTracker tracker = player.getCooldownTracker();
         if(!tracker.hasCooldown(this)) {
-            player.addPotionEffect(new EffectInstance(Effects.INVISIBILITY, 20 * duration));
-            player.addPotionEffect(new EffectInstance(UtilcraftWeaponsEffects.SNEAK, 20 * duration));
+            player.addPotionEffect(new EffectInstance(UtilcraftWeaponsEffects.STEALTH, 20 * duration));
             player.addPotionEffect(new EffectInstance(Effects.SPEED, 20 * duration, 3));
             tracker.setCooldown(this, 20 * coolDown);
             return ActionResult.resultConsume(player.getHeldItem(hand));

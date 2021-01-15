@@ -1,15 +1,12 @@
 package net.petersil98.utilcraft_weapons;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
 import net.minecraft.potion.Effect;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,16 +19,15 @@ import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.petersil98.utilcraft.blocks.ModBlocks;
-import net.petersil98.utilcraft.tile_entities.DisenchantmentTableTileEntity;
-import net.petersil98.utilcraft.tile_entities.SecureChestTileEntity;
-import net.petersil98.utilcraft_weapons.effects.SneakEffect;
+import net.petersil98.utilcraft_weapons.data.capabilities.stealth.CapabilityStealth;
+import net.petersil98.utilcraft_weapons.effects.StealthEffect;
 import net.petersil98.utilcraft_weapons.entities.BulletEntity;
 import net.petersil98.utilcraft_weapons.entities.UtilcraftWeaponsEntities;
 import net.petersil98.utilcraft_weapons.items.AssassinsKnife;
 import net.petersil98.utilcraft_weapons.items.BulletItem;
 import net.petersil98.utilcraft_weapons.items.SniperRifle;
+import net.petersil98.utilcraft_weapons.network.PacketHandler;
 import net.petersil98.utilcraft_weapons.renderer.BulletRenderer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -68,7 +64,8 @@ public class UtilcraftWeapons
 
     private void setup(final FMLCommonSetupEvent event)
     {
-
+        CapabilityStealth.register();
+        PacketHandler.registerMessages();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
@@ -114,7 +111,7 @@ public class UtilcraftWeapons
 
         @SubscribeEvent
         public static void registerEffects(final RegistryEvent.Register<Effect> effectRegistryEvent) {
-            effectRegistryEvent.getRegistry().register(new SneakEffect().setRegistryName("sneak"));
+            effectRegistryEvent.getRegistry().register(new StealthEffect().setRegistryName("stealth"));
         }
 
         @SubscribeEvent

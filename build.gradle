@@ -43,6 +43,8 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
+            // args '--username', 'Dev123'
+
             mods {
                 utilcraft_weapons {
                     source sourceSets.main
