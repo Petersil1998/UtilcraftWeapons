@@ -1,6 +1,5 @@
 package net.petersil98.utilcraft_weapons.data.capabilities.stealth;
 
-
 public class DefaultStealth implements IStealth {
 
     private boolean stealth;
@@ -11,6 +10,6 @@ public class DefaultStealth implements IStealth {
     }
 
     public boolean isStealth() {
-        return stealth;
+        return this.stealth;
     }
 }

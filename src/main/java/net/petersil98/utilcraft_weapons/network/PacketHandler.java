@@ -1,10 +1,7 @@
 package net.petersil98.utilcraft_weapons.network;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.fml.network.simple.SimpleChannel;

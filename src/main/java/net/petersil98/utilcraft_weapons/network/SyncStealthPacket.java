@@ -7,7 +7,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.petersil98.utilcraft_weapons.data.capabilities.stealth.CapabilityStealth;
 
-import java.util.UUID;
+import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 
 public class SyncStealthPacket {
@@ -20,17 +20,17 @@ public class SyncStealthPacket {
         this.entityID = entityID;
     }
 
-    public SyncStealthPacket(PacketBuffer packetBuffer) {
+    public SyncStealthPacket(@Nonnull PacketBuffer packetBuffer) {
         this.stealth = packetBuffer.readBoolean();
         this.entityID = packetBuffer.readInt();
     }
 
-    public void encode(PacketBuffer buf) {
+    public void encode(@Nonnull PacketBuffer buf) {
         buf.writeBoolean(stealth);
         buf.writeInt(entityID);
     }
 
-    public boolean handle(Supplier<NetworkEvent.Context> ctx) {
+    public boolean handle(@Nonnull Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             PlayerEntity player = Minecraft.getInstance().player;
             if(player != null) {

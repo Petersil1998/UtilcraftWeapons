@@ -12,7 +12,6 @@ import net.minecraft.network.IPacket;
 import net.minecraft.network.play.server.SChangeGameStatePacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.IndirectEntityDamageSource;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -25,17 +24,17 @@ public class BulletEntity extends ProjectileEntity {
 
     private float damage = 5f;
 
-    public BulletEntity(EntityType<? extends BulletEntity> type, World worldIn) {
-        super(type, worldIn);
+    public BulletEntity(EntityType<? extends BulletEntity> type, World world) {
+        super(type, world);
     }
 
-    public BulletEntity(World worldIn, double x, double y, double z) {
-        this(UtilcraftWeaponsEntities.BULLET_ENTITY, worldIn);
+    public BulletEntity(World world, double x, double y, double z) {
+        this(UtilcraftWeaponsEntities.BULLET_ENTITY, world);
         this.setPosition(x, y, z);
     }
 
-    public BulletEntity(World worldIn, LivingEntity shooter) {
-        this(worldIn, shooter.getPosX(), shooter.getPosYEye() - (double)0.1F, shooter.getPosZ());
+    public BulletEntity(World world, @Nonnull LivingEntity shooter) {
+        this(world, shooter.getPosX(), shooter.getPosYEye() - (double)0.1F, shooter.getPosZ());
         this.setShooter(shooter);
     }
 
@@ -145,9 +144,6 @@ public class BulletEntity extends ProjectileEntity {
         if (hitEntity.attackEntityFrom(damagesource, getDamage())) {
             if (hitEntity instanceof LivingEntity) {
                 LivingEntity livingentity = (LivingEntity)hitEntity;
-                /*if (!this.world.isRemote) {
-                    livingentity.setArrowCountInEntity(livingentity.getArrowCountInEntity() + 1);
-                }*/
 
                 if (!this.world.isRemote && shootingEntity instanceof LivingEntity) {
                     EnchantmentHelper.applyThornEnchantments(livingentity, shootingEntity);
@@ -175,6 +171,6 @@ public class BulletEntity extends ProjectileEntity {
     }
 
     public float getDamage() {
-        return damage;
+        return this.damage;
     }
 }

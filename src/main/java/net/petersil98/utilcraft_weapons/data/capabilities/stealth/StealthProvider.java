@@ -12,17 +12,17 @@ import javax.annotation.Nullable;
 public class StealthProvider implements ICapabilitySerializable<CompoundNBT> {
 
     private final DefaultStealth stealth = new DefaultStealth();
-    private final LazyOptional<IStealth> stealthOptional = LazyOptional.of(() -> stealth);
+    private final LazyOptional<IStealth> stealthOptional = LazyOptional.of(() -> this.stealth);
 
     public void invalidate() {
-        stealthOptional.invalidate();
+        this.stealthOptional.invalidate();
     }
 
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if(cap == CapabilityStealth.STEALTH_CAPABILITY) {
-            return stealthOptional.cast();
+            return this.stealthOptional.cast();
         } else {
             return LazyOptional.empty();
         }
@@ -33,14 +33,14 @@ public class StealthProvider implements ICapabilitySerializable<CompoundNBT> {
         if (CapabilityStealth.STEALTH_CAPABILITY == null) {
             return new CompoundNBT();
         } else {
-            return (CompoundNBT) CapabilityStealth.STEALTH_CAPABILITY.writeNBT(stealth, null);
+            return (CompoundNBT) CapabilityStealth.STEALTH_CAPABILITY.writeNBT(this.stealth, null);
         }
     }
 
     @Override
     public void deserializeNBT(CompoundNBT nbt) {
         if (CapabilityStealth.STEALTH_CAPABILITY != null) {
-            CapabilityStealth.STEALTH_CAPABILITY.readNBT(stealth, null, nbt);
+            CapabilityStealth.STEALTH_CAPABILITY.readNBT(this.stealth, null, nbt);
         }
     }
 }

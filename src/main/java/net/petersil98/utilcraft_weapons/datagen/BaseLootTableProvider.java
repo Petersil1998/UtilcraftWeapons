@@ -28,9 +28,7 @@ import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.state.properties.SlabType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.data.ForgeLootTableProvider;
-import net.petersil98.utilcraft.blocks.custom.SideSlabType;
-import net.petersil98.utilcraft.blocks.sideslabs.SideSlabBlock;
-import net.petersil98.utilcraft.utils.BlockItemUtils;
+import net.petersil98.utilcraft_weapons.utils.BlockItemUtils;
 import net.petersil98.utilcraft_weapons.UtilcraftWeapons;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,9 +47,9 @@ public abstract class BaseLootTableProvider extends ForgeLootTableProvider {
     protected final Map<Block, LootTable.Builder> lootTables = new HashMap<>();
     private final DataGenerator generator;
 
-    public BaseLootTableProvider(DataGenerator dataGeneratorIn) {
-        super(dataGeneratorIn);
-        this.generator = dataGeneratorIn;
+    public BaseLootTableProvider(DataGenerator dataGenerator) {
+        super(dataGenerator);
+        this.generator = dataGenerator;
     }
 
     protected abstract void addTables();
@@ -67,21 +65,6 @@ public abstract class BaseLootTableProvider extends ForgeLootTableProvider {
                                         .fromProperties(StatePropertiesPredicate.Builder
                                             .newBuilder()
                                             .withProp(SlabBlock.TYPE, SlabType.DOUBLE))))
-                );
-        return LootTable.builder().addLootPool(builder);
-    }
-
-    protected LootTable.Builder createSideSlabTable(Block block) {
-        LootPool.Builder builder = LootPool.builder()
-                .name(BlockItemUtils.name(block))
-                .rolls(ConstantRange.of(1))
-                .addEntry(ItemLootEntry.builder(block)
-                        .acceptFunction(ExplosionDecay.builder())
-                        .acceptFunction(SetCount.builder(new ConstantRange(2))
-                                .acceptCondition(BlockStateProperty.builder(block)
-                                        .fromProperties(StatePropertiesPredicate.Builder
-                                                .newBuilder()
-                                                .withProp(SideSlabBlock.TYPE, SideSlabType.DOUBLE))))
                 );
         return LootTable.builder().addLootPool(builder);
     }
@@ -190,7 +173,7 @@ public abstract class BaseLootTableProvider extends ForgeLootTableProvider {
         writeTables(cache, tables);
     }
 
-    private void writeTables(DirectoryCache cache, Map<ResourceLocation, LootTable> tables) {
+    private void writeTables(DirectoryCache cache, @Nonnull Map<ResourceLocation, LootTable> tables) {
         Path outputFolder = this.generator.getOutputFolder();
         tables.forEach((key, lootTable) -> {
             Path path = outputFolder.resolve("data/" + key.getNamespace() + "/loot_tables/" + key.getPath() + ".json");

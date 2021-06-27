@@ -3,12 +3,11 @@ package net.petersil98.utilcraft_weapons.datagen;
 import net.minecraft.block.*;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.Item;
-import net.petersil98.utilcraft.blocks.sideslabs.SideSlabBlock;
 
 public class LootTables extends BaseLootTableProvider {
 
-    public LootTables(DataGenerator dataGeneratorIn) {
-        super(dataGeneratorIn);
+    public LootTables(DataGenerator dataGenerator) {
+        super(dataGenerator);
     }
 
     @Override
@@ -26,10 +25,6 @@ public class LootTables extends BaseLootTableProvider {
 
     private void addSlab(SlabBlock block) {
         lootTables.put(block, createSlabTable(block));
-    }
-
-    private void addSideSlab(SideSlabBlock block) {
-        lootTables.put(block, createSideSlabTable(block));
     }
 
     private void addOreBlock(Block block, Item drop) {

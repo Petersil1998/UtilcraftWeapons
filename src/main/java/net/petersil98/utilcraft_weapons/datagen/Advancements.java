@@ -56,8 +56,9 @@ public class Advancements implements IDataProvider {
 
     }
 
-    private static Path getPath(Path pathIn, Advancement advancementIn) {
-        return pathIn.resolve("data/" + advancementIn.getId().getNamespace() + "/advancements/" + advancementIn.getId().getPath() + ".json");
+    @Nonnull
+    private static Path getPath(@Nonnull Path path, @Nonnull Advancement advancement) {
+        return path.resolve("data/" + advancement.getId().getNamespace() + "/advancements/" + advancement.getId().getPath() + ".json");
     }
 
     @Nonnull

@@ -22,7 +22,7 @@ public class SniperRifle extends ShootableItem {
     public SniperRifle() {
         super(new Properties()
                 .maxStackSize(1)
-                .group(UtilcraftWeapons.itemGroup)
+                .group(UtilcraftWeapons.ITEM_GROUP)
         );
     }
 
@@ -33,11 +33,11 @@ public class SniperRifle extends ShootableItem {
 
     @Override
     @Nonnull
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, @Nonnull PlayerEntity playerIn, @Nonnull Hand handIn) {
-        if(worldIn.isRemote) {
-            isZoomedIn = !isZoomedIn;
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
+        if(world.isRemote) {
+            this.isZoomedIn = !this.isZoomedIn;
         }
-        return super.onItemRightClick(worldIn, playerIn, handIn);
+        return super.onItemRightClick(world, player, hand);
     }
 
     public boolean shootBullet(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
@@ -76,6 +76,6 @@ public class SniperRifle extends ShootableItem {
     }
 
     public boolean isZoomedIn() {
-        return isZoomedIn;
+        return this.isZoomedIn;
     }
 }

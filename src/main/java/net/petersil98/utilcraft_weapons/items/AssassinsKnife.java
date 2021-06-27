@@ -10,19 +10,18 @@ import net.minecraft.util.CooldownTracker;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.petersil98.utilcraft_weapons.UtilcraftWeapons;
-import net.petersil98.utilcraft_weapons.data.capabilities.stealth.CapabilityStealth;
 import net.petersil98.utilcraft_weapons.effects.UtilcraftWeaponsEffects;
 
 import javax.annotation.Nonnull;
 
 public class AssassinsKnife extends SwordItem {
 
-    private final int coolDown = 15;
+    private final int cooldown = 15;
     private final int duration = 10;
 
     public AssassinsKnife() {
         super(ItemTier.NETHERITE, 5, -2.4F, new Item.Properties()
-                .group(UtilcraftWeapons.itemGroup)
+                .group(UtilcraftWeapons.ITEM_GROUP)
         );
     }
 
@@ -31,9 +30,9 @@ public class AssassinsKnife extends SwordItem {
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
         CooldownTracker tracker = player.getCooldownTracker();
         if(!tracker.hasCooldown(this)) {
-            player.addPotionEffect(new EffectInstance(UtilcraftWeaponsEffects.STEALTH, 20 * duration));
-            player.addPotionEffect(new EffectInstance(Effects.SPEED, 20 * duration, 3));
-            tracker.setCooldown(this, 20 * coolDown);
+            player.addPotionEffect(new EffectInstance(UtilcraftWeaponsEffects.STEALTH, 20 * this.duration));
+            player.addPotionEffect(new EffectInstance(Effects.SPEED, 20 * this.duration, 3));
+            tracker.setCooldown(this, 20 * this.cooldown);
             return ActionResult.resultConsume(player.getHeldItem(hand));
         }
         return super.onItemRightClick(world, player, hand);
@@ -45,7 +44,7 @@ public class AssassinsKnife extends SwordItem {
     }
 
     @Override
-    public boolean canHarvestBlock(@Nonnull BlockState blockIn) {
+    public boolean canHarvestBlock(@Nonnull BlockState block) {
         return false;
     }
 }

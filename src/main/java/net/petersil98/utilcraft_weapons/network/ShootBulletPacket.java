@@ -6,6 +6,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.petersil98.utilcraft_weapons.items.SniperRifle;
 
+import javax.annotation.Nonnull;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
@@ -14,13 +15,13 @@ public class ShootBulletPacket {
     public ShootBulletPacket() {
     }
 
-    public ShootBulletPacket(PacketBuffer packetBuffer) {
+    public ShootBulletPacket(@Nonnull PacketBuffer packetBuffer) {
     }
 
-    public void encode(PacketBuffer buf) {
+    public void encode(@Nonnull PacketBuffer buf) {
     }
 
-    public boolean handle(Supplier<NetworkEvent.Context> ctx) {
+    public boolean handle(@Nonnull Supplier<NetworkEvent.Context> ctx) {
         AtomicBoolean successful = new AtomicBoolean(true);
         ctx.get().enqueueWork(() -> {
             ServerPlayerEntity player = ctx.get().getSender();

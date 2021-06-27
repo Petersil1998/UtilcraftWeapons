@@ -7,6 +7,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class CapabilityStealth {
@@ -21,14 +22,14 @@ public class CapabilityStealth {
 
         @Nullable
         @Override
-        public INBT writeNBT(Capability<IStealth> capability, IStealth instance, Direction side) {
+        public INBT writeNBT(Capability<IStealth> capability, @Nonnull IStealth instance, Direction side) {
             CompoundNBT tag = new CompoundNBT();
             tag.putBoolean("stealth", instance.isStealth());
             return tag;
         }
 
         @Override
-        public void readNBT(Capability<IStealth> capability, IStealth instance, Direction side, INBT nbt) {
+        public void readNBT(Capability<IStealth> capability, @Nonnull IStealth instance, Direction side, INBT nbt) {
             boolean charge = ((CompoundNBT) nbt).getBoolean("stealth");
             instance.setStealth(charge);
         }
