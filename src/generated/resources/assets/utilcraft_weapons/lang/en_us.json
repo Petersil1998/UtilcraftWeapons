@@ -2,7 +2,9 @@
   "effect.utilcraft_weapons.stealth": "Stealth",
   "item.utilcraft_weapons.assassins_knife": "Assassin's Knife",
   "item.utilcraft_weapons.bullet": "Bullet",
+  "item.utilcraft_weapons.smoke_grenade": "Smoke Grenade",
   "item.utilcraft_weapons.sniper_rifle": "Sniper Rifle",
+  "itemGroup.utilcraft_weapons": "Utilcraft Weapons",
   "utilcraft_weapons.kill.knife": "%s got stabbed by %s",
   "utilcraft_weapons.kill.sniper": "%s got sniped by %s"
 }
