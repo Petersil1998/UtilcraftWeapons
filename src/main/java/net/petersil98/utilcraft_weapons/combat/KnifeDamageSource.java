@@ -4,7 +4,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.petersil98.utilcraft_weapons.UtilcraftWeapons;
 
@@ -18,7 +17,7 @@ public class KnifeDamageSource extends EntityDamageSource {
 
     @Override
     @Nonnull
-    public ITextComponent getDeathMessage(LivingEntity entityLivingBaseIn) {
-        return new TranslationTextComponent(String.format("%s.kill.knife", UtilcraftWeapons.MOD_ID), entityLivingBaseIn.getDisplayName().getString(), damageSourceEntity.getDisplayName().getString());
+    public ITextComponent getDeathMessage(@Nonnull LivingEntity killedEntity) {
+        return new TranslationTextComponent(String.format("%s.kill.knife", UtilcraftWeapons.MOD_ID), killedEntity.getDisplayName().getString(), this.damageSourceEntity.getDisplayName().getString());
     }
 }
