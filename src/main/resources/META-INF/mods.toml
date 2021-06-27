@@ -57,9 +57,3 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mollis lacinia magn
     versionRange="[1.16.3]"
     ordering="NONE"
     side="BOTH"
-[[dependencies.utilcraft_weapons]]
-    modId="utilcraft"
-    mandatory=true
-    versionRange="[1.0,)"
-    ordering="NONE"
-    side="BOTH"
