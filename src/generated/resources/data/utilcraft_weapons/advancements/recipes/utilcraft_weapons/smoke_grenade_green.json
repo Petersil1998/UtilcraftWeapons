@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "utilcraft_weapons:smoke_grenade_green"
+    ]
+  },
+  "criteria": {
+    "smoke_grenade": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "utilcraft_weapons:smoke_grenade"
+          }
+        ]
+      }
+    },
+    "green_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:dyes/green"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "utilcraft_weapons:smoke_grenade_green"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "smoke_grenade",
+      "green_dye",
+      "has_the_recipe"
+    ]
+  ]
+}

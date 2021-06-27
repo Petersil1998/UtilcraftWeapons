@@ -9,4 +9,7 @@ public class UtilcraftWeaponsEntities {
 
     @ObjectHolder("bullet_entity")
     public static EntityType<BulletEntity> BULLET_ENTITY;
+
+    @ObjectHolder("smoke_grenade_entity")
+    public static EntityType<SmokeGrenadeEntity> SMOKE_GRENADE_ENTITY;
 }

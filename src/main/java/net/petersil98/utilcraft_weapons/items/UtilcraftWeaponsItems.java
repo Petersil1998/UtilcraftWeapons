@@ -14,4 +14,7 @@ public class UtilcraftWeaponsItems {
 
     @ObjectHolder("bullet")
     public static BulletItem BULLET_ITEM;
+
+    @ObjectHolder("smoke_grenade")
+    public static SmokeGrenade SMOKE_GRENADE;
 }

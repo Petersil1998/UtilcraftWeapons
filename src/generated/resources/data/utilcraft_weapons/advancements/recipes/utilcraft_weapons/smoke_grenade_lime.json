@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "utilcraft_weapons:smoke_grenade_lime"
+    ]
+  },
+  "criteria": {
+    "smoke_grenade": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "utilcraft_weapons:smoke_grenade"
+          }
+        ]
+      }
+    },
+    "lime_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:dyes/lime"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "utilcraft_weapons:smoke_grenade_lime"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "smoke_grenade",
+      "lime_dye",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -6,7 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.petersil98.utilcraft.utils.BlockItemUtils;
+import net.petersil98.utilcraft_weapons.utils.BlockItemUtils;
 import net.petersil98.utilcraft_weapons.UtilcraftWeapons;
 import net.petersil98.utilcraft_weapons.items.UtilcraftWeaponsItems;
 
@@ -19,6 +19,7 @@ public class ItemModels extends ItemModelProvider {
     @Override
     protected void registerModels() {
         registerHandheld(UtilcraftWeaponsItems.SNIPER_RIFLE);
+        registerHandheld(UtilcraftWeaponsItems.SMOKE_GRENADE);
     }
 
     private void registerHandheld(Item item) {
