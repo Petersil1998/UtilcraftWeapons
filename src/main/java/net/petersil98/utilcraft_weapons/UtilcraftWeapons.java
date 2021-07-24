@@ -42,7 +42,7 @@ public class UtilcraftWeapons
 
         @Nonnull
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(UtilcraftWeaponsItems.ASSASSINS_KNIFE);
         }
     };
@@ -89,8 +89,8 @@ public class UtilcraftWeapons
 
         @SubscribeEvent
         public static void registerEntities(@Nonnull final RegistryEvent.Register<EntityType<?>> entityRegister) {
-            entityRegister.getRegistry().register(EntityType.Builder.<BulletEntity>create(BulletEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).trackingRange(4).func_233608_b_(20).build("bullet_entity").setRegistryName("bullet_entity"));
-            entityRegister.getRegistry().register(EntityType.Builder.<SmokeGrenadeEntity>create(SmokeGrenadeEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).trackingRange(4).func_233608_b_(10).build("smoke_grenade_entity").setRegistryName("smoke_grenade_entity"));
+            entityRegister.getRegistry().register(EntityType.Builder.<BulletEntity>of(BulletEntity::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(20).build("bullet_entity").setRegistryName("bullet_entity"));
+            entityRegister.getRegistry().register(EntityType.Builder.<SmokeGrenadeEntity>of(SmokeGrenadeEntity::new, EntityClassification.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10).build("smoke_grenade_entity").setRegistryName("smoke_grenade_entity"));
         }
         @SubscribeEvent
         public static void registerParticleTypes(@Nonnull final RegistryEvent.Register<ParticleType<?>> particleTypeRegister) {
@@ -103,7 +103,7 @@ public class UtilcraftWeapons
 
         @SubscribeEvent
         public static void registerParticles(ParticleFactoryRegisterEvent event) {
-            Minecraft.getInstance().particles.registerFactory(UtilcraftWeaponsParticleTypes.SMOKE_CLOUD, SmokeCloudParticleFactory::new);
+            Minecraft.getInstance().particleEngine.register(UtilcraftWeaponsParticleTypes.SMOKE_CLOUD, SmokeCloudParticleFactory::new);
         }
     }
 }

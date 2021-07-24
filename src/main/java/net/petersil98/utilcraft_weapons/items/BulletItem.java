@@ -7,7 +7,7 @@ public class BulletItem extends Item {
 
     public BulletItem() {
         super(new Item.Properties()
-                .group(UtilcraftWeapons.ITEM_GROUP)
+                .tab(UtilcraftWeapons.ITEM_GROUP)
         );
     }
 }

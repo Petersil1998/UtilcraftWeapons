@@ -18,22 +18,22 @@ public class StealthEffect extends Effect {
     }
 
     @Override
-    public void applyAttributesModifiersToEntity(@Nonnull LivingEntity entityLivingBase, @Nonnull AttributeModifierManager attributeMap, int amplifier) {
-        super.applyAttributesModifiersToEntity(entityLivingBase, attributeMap, amplifier);
+    public void addAttributeModifiers(@Nonnull LivingEntity entityLivingBase, @Nonnull AttributeModifierManager attributeMap, int amplifier) {
+        super.addAttributeModifiers(entityLivingBase, attributeMap, amplifier);
         if(entityLivingBase instanceof ServerPlayerEntity) {
             ServerPlayerEntity player = (ServerPlayerEntity) entityLivingBase;
             player.getCapability(CapabilityStealth.STEALTH_CAPABILITY).ifPresent(iStealth -> iStealth.setStealth(true));
-            PacketHandler.sendToClients(new SyncStealthPacket(true, player.getEntityId()), player);
+            PacketHandler.sendToClients(new SyncStealthPacket(true, player.getId()), player);
         }
     }
 
     @Override
-    public void removeAttributesModifiersFromEntity(@Nonnull LivingEntity entityLivingBase, @Nonnull AttributeModifierManager attributeMap, int amplifier) {
-        super.removeAttributesModifiersFromEntity(entityLivingBase, attributeMap, amplifier);
+    public void removeAttributeModifiers(@Nonnull LivingEntity entityLivingBase, @Nonnull AttributeModifierManager attributeMap, int amplifier) {
+        super.removeAttributeModifiers(entityLivingBase, attributeMap, amplifier);
         if(entityLivingBase instanceof ServerPlayerEntity) {
             ServerPlayerEntity player = (ServerPlayerEntity) entityLivingBase;
             player.getCapability(CapabilityStealth.STEALTH_CAPABILITY).ifPresent(iStealth -> iStealth.setStealth(false));
-            PacketHandler.sendToClients(new SyncStealthPacket(false, player.getEntityId()), player);
+            PacketHandler.sendToClients(new SyncStealthPacket(false, player.getId()), player);
         }
     }
 }

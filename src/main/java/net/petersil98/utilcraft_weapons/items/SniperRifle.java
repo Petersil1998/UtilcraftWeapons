@@ -13,6 +13,8 @@ import net.petersil98.utilcraft_weapons.entities.BulletEntity;
 import javax.annotation.Nonnull;
 import java.util.function.Predicate;
 
+import net.minecraft.item.Item.Properties;
+
 public class SniperRifle extends ShootableItem {
 
     private boolean isZoomedIn = false;
@@ -21,8 +23,8 @@ public class SniperRifle extends ShootableItem {
 
     public SniperRifle() {
         super(new Properties()
-                .maxStackSize(1)
-                .group(UtilcraftWeapons.ITEM_GROUP)
+                .stacksTo(1)
+                .tab(UtilcraftWeapons.ITEM_GROUP)
         );
     }
 
@@ -33,31 +35,31 @@ public class SniperRifle extends ShootableItem {
 
     @Override
     @Nonnull
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
-        if(world.isRemote) {
+    public ActionResult<ItemStack> use(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
+        if(world.isClientSide) {
             this.isZoomedIn = !this.isZoomedIn;
         }
-        return super.onItemRightClick(world, player, hand);
+        return super.use(world, player, hand);
     }
 
     public boolean shootBullet(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
-        ItemStack itemstack = player.getHeldItem(hand);
-        ItemStack ammo = player.findAmmo(itemstack);
+        ItemStack itemstack = player.getItemInHand(hand);
+        ItemStack ammo = player.getProjectile(itemstack);
         boolean hasAmmo = !ammo.isEmpty();
 
-        if (!player.abilities.isCreativeMode && !hasAmmo) {
+        if (!player.abilities.instabuild && !hasAmmo) {
             return false;
         } else {
-            boolean shouldReduceAmmo = !player.abilities.isCreativeMode;
+            boolean shouldReduceAmmo = !player.abilities.instabuild;
             BulletEntity bullet = new BulletEntity(world, player);
             bullet.setDamage(5);
-            bullet.func_234612_a_(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.0F, 1.0F);
-            world.addEntity(bullet);
-            player.setActiveHand(hand);
+            bullet.shootFromRotation(player, player.xRot, player.yRot, 0.0F, 3.0F, 1.0F);
+            world.addFreshEntity(bullet);
+            player.startUsingItem(hand);
             if(shouldReduceAmmo) {
                 ammo.shrink(1);
                 if (ammo.isEmpty()) {
-                    player.inventory.deleteStack(ammo);
+                    player.inventory.removeItem(ammo);
                 }
             }
             return true;
@@ -66,12 +68,12 @@ public class SniperRifle extends ShootableItem {
 
     @Override
     @Nonnull
-    public Predicate<ItemStack> getInventoryAmmoPredicate() {
+    public Predicate<ItemStack> getAllSupportedProjectiles() {
         return BULLETS;
     }
 
     @Override
-    public int func_230305_d_() {
+    public int getDefaultProjectileRange() {
         return 15;
     }
 

@@ -21,21 +21,21 @@ public class AssassinsKnife extends SwordItem {
 
     public AssassinsKnife() {
         super(ItemTier.NETHERITE, 5, -2.4F, new Item.Properties()
-                .group(UtilcraftWeapons.ITEM_GROUP)
+                .tab(UtilcraftWeapons.ITEM_GROUP)
         );
     }
 
     @Override
     @Nonnull
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
-        CooldownTracker tracker = player.getCooldownTracker();
-        if(!tracker.hasCooldown(this)) {
-            player.addPotionEffect(new EffectInstance(UtilcraftWeaponsEffects.STEALTH, 20 * this.duration));
-            player.addPotionEffect(new EffectInstance(Effects.SPEED, 20 * this.duration, 3));
-            tracker.setCooldown(this, 20 * this.cooldown);
-            return ActionResult.resultConsume(player.getHeldItem(hand));
+    public ActionResult<ItemStack> use(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
+        CooldownTracker tracker = player.getCooldowns();
+        if(!tracker.isOnCooldown(this)) {
+            player.addEffect(new EffectInstance(UtilcraftWeaponsEffects.STEALTH, 20 * this.duration));
+            player.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 20 * this.duration, 3));
+            tracker.addCooldown(this, 20 * this.cooldown);
+            return ActionResult.consume(player.getItemInHand(hand));
         }
-        return super.onItemRightClick(world, player, hand);
+        return super.use(world, player, hand);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class AssassinsKnife extends SwordItem {
     }
 
     @Override
-    public boolean canHarvestBlock(@Nonnull BlockState block) {
+    public boolean isCorrectToolForDrops(@Nonnull BlockState block) {
         return false;
     }
 }

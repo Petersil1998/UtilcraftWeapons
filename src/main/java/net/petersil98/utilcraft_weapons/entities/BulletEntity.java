@@ -30,45 +30,45 @@ public class BulletEntity extends ProjectileEntity {
 
     public BulletEntity(World world, double x, double y, double z) {
         this(UtilcraftWeaponsEntities.BULLET_ENTITY, world);
-        this.setPosition(x, y, z);
+        this.setPos(x, y, z);
     }
 
     public BulletEntity(World world, @Nonnull LivingEntity shooter) {
-        this(world, shooter.getPosX(), shooter.getPosYEye() - (double)0.1F, shooter.getPosZ());
-        this.setShooter(shooter);
+        this(world, shooter.getX(), shooter.getEyeY() - (double)0.1F, shooter.getZ());
+        this.setOwner(shooter);
     }
 
     @Override
-    protected void registerData() {
+    protected void defineSynchedData() {
 
     }
 
     @Override
     @Nonnull
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
     public void tick() {
         super.tick();
-        Vector3d motion = this.getMotion();
-        if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F) {
-            float f = MathHelper.sqrt(horizontalMag(motion));
-            this.rotationYaw = (float)(MathHelper.atan2(motion.x, motion.z) * (double)(180F / (float)Math.PI));
-            this.rotationPitch = (float)(MathHelper.atan2(motion.y, f) * (double)(180F / (float)Math.PI));
-            this.prevRotationYaw = this.rotationYaw;
-            this.prevRotationPitch = this.rotationPitch;
+        Vector3d motion = this.getDeltaMovement();
+        if (this.xRotO == 0.0F && this.yRotO == 0.0F) {
+            float f = MathHelper.sqrt(getHorizontalDistanceSqr(motion));
+            this.yRot = (float)(MathHelper.atan2(motion.x, motion.z) * (double)(180F / (float)Math.PI));
+            this.xRot = (float)(MathHelper.atan2(motion.y, f) * (double)(180F / (float)Math.PI));
+            this.yRotO = this.yRot;
+            this.xRotO = this.xRot;
         }
 
-        if (this.isWet()) {
-            this.extinguish();
+        if (this.isInWaterOrRain()) {
+            this.clearFire();
         }
-        Vector3d positionVec = this.getPositionVec();
+        Vector3d positionVec = this.position();
         Vector3d positionMoved = positionVec.add(motion);
-        RayTraceResult raytraceresult = this.world.rayTraceBlocks(new RayTraceContext(positionVec, positionMoved, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+        RayTraceResult raytraceresult = this.level.clip(new RayTraceContext(positionVec, positionMoved, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
         if (raytraceresult.getType() != RayTraceResult.Type.MISS) {
-            positionMoved = raytraceresult.getHitVec();
+            positionMoved = raytraceresult.getLocation();
         }
 
         while(isAlive()) {
@@ -79,16 +79,16 @@ public class BulletEntity extends ProjectileEntity {
 
             if (raytraceresult != null && raytraceresult.getType() == RayTraceResult.Type.ENTITY) {
                 Entity entity = ((EntityRayTraceResult)raytraceresult).getEntity();
-                Entity entity1 = this.func_234616_v_();
-                if (entity instanceof PlayerEntity && entity1 instanceof PlayerEntity && !((PlayerEntity)entity1).canAttackPlayer((PlayerEntity)entity)) {
+                Entity entity1 = this.getOwner();
+                if (entity instanceof PlayerEntity && entity1 instanceof PlayerEntity && !((PlayerEntity)entity1).canHarmPlayer((PlayerEntity)entity)) {
                     raytraceresult = null;
                     entityraytraceresult = null;
                 }
             }
 
             if (raytraceresult != null && raytraceresult.getType() != RayTraceResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
-                this.onImpact(raytraceresult);
-                this.isAirBorne = true;
+                this.onHit(raytraceresult);
+                this.hasImpulse = true;
             }
 
             if (entityraytraceresult == null) {
@@ -98,72 +98,72 @@ public class BulletEntity extends ProjectileEntity {
             raytraceresult = null;
         }
 
-        motion = this.getMotion();
+        motion = this.getDeltaMovement();
         double motionX = motion.x;
         double motionY = motion.y;
         double motionZ = motion.z;
 
-        double newX = this.getPosX() + motionX;
-        double newY = this.getPosY() + motionY;
-        double newZ = this.getPosZ() + motionZ;
-        float f1 = MathHelper.sqrt(horizontalMag(motion));
-        this.rotationYaw = (float)(MathHelper.atan2(motionX, motionZ) * (double)(180F / (float)Math.PI));
+        double newX = this.getX() + motionX;
+        double newY = this.getY() + motionY;
+        double newZ = this.getZ() + motionZ;
+        float f1 = MathHelper.sqrt(getHorizontalDistanceSqr(motion));
+        this.yRot = (float)(MathHelper.atan2(motionX, motionZ) * (double)(180F / (float)Math.PI));
 
-        this.rotationPitch = (float)(MathHelper.atan2(motionY, f1) * (double)(180F / (float)Math.PI));
-        this.rotationPitch = func_234614_e_(this.prevRotationPitch, this.rotationPitch);
-        this.rotationYaw = func_234614_e_(this.prevRotationYaw, this.rotationYaw);
+        this.xRot = (float)(MathHelper.atan2(motionY, f1) * (double)(180F / (float)Math.PI));
+        this.xRot = lerpRotation(this.xRotO, this.xRot);
+        this.yRot = lerpRotation(this.yRotO, this.yRot);
         float drag = 0.99F;
         if (this.isInWater()) {
             for(int j = 0; j < 4; ++j) {
-                this.world.addParticle(ParticleTypes.BUBBLE, newX - motionX * 0.25D, newY - motionY * 0.25D, newZ - motionZ * 0.25D, motionX, motionY, motionZ);
+                this.level.addParticle(ParticleTypes.BUBBLE, newX - motionX * 0.25D, newY - motionY * 0.25D, newZ - motionZ * 0.25D, motionX, motionY, motionZ);
             }
         }
 
-        this.setMotion(motion.scale(drag));
-        if (!this.hasNoGravity()) {
-            Vector3d vector3d4 = this.getMotion();
-            this.setMotion(vector3d4.x, vector3d4.y - (double)0.05F, vector3d4.z);
+        this.setDeltaMovement(motion.scale(drag));
+        if (!this.isNoGravity()) {
+            Vector3d vector3d4 = this.getDeltaMovement();
+            this.setDeltaMovement(vector3d4.x, vector3d4.y - (double)0.05F, vector3d4.z);
         }
 
-        this.setPosition(newX, newY, newZ);
-        this.doBlockCollisions();
+        this.setPos(newX, newY, newZ);
+        this.checkInsideBlocks();
     }
 
     @Override
-    protected void onEntityHit(@Nonnull EntityRayTraceResult rayTraceResult) {
-        super.onEntityHit(rayTraceResult);
+    protected void onHitEntity(@Nonnull EntityRayTraceResult rayTraceResult) {
+        super.onHitEntity(rayTraceResult);
         Entity hitEntity = rayTraceResult.getEntity();
 
-        Entity shootingEntity = this.func_234616_v_();
+        Entity shootingEntity = this.getOwner();
 
         DamageSource damagesource = new BulletDamageSource(shootingEntity);
         if (shootingEntity instanceof LivingEntity) {
-            ((LivingEntity)shootingEntity).setLastAttackedEntity(hitEntity);
+            ((LivingEntity)shootingEntity).setLastHurtMob(hitEntity);
         }
 
-        if (hitEntity.attackEntityFrom(damagesource, getDamage())) {
+        if (hitEntity.hurt(damagesource, getDamage())) {
             if (hitEntity instanceof LivingEntity) {
                 LivingEntity livingentity = (LivingEntity)hitEntity;
 
-                if (!this.world.isRemote && shootingEntity instanceof LivingEntity) {
-                    EnchantmentHelper.applyThornEnchantments(livingentity, shootingEntity);
-                    EnchantmentHelper.applyArthropodEnchantments((LivingEntity)shootingEntity, livingentity);
+                if (!this.level.isClientSide && shootingEntity instanceof LivingEntity) {
+                    EnchantmentHelper.doPostHurtEffects(livingentity, shootingEntity);
+                    EnchantmentHelper.doPostDamageEffects((LivingEntity)shootingEntity, livingentity);
                 }
 
                 if (livingentity != shootingEntity && livingentity instanceof PlayerEntity && shootingEntity instanceof ServerPlayerEntity && !this.isSilent()) {
-                    ((ServerPlayerEntity)shootingEntity).connection.sendPacket(new SChangeGameStatePacket(SChangeGameStatePacket.field_241770_g_, 0.0F));
+                    ((ServerPlayerEntity)shootingEntity).connection.send(new SChangeGameStatePacket(SChangeGameStatePacket.ARROW_HIT_PLAYER, 0.0F));
                 }
             }
         } else {
-            this.setMotion(this.getMotion().scale(-0.1D));
-            this.rotationYaw += 180.0F;
-            this.prevRotationYaw += 180.0F;
+            this.setDeltaMovement(this.getDeltaMovement().scale(-0.1D));
+            this.yRot += 180.0F;
+            this.yRotO += 180.0F;
         }
         this.remove();
     }
 
     protected EntityRayTraceResult rayTraceEntities(Vector3d startVec, Vector3d endVec) {
-        return ProjectileHelper.rayTraceEntities(this.world, this, startVec, endVec, this.getBoundingBox().expand(this.getMotion()).grow(1.0D), this::func_230298_a_);
+        return ProjectileHelper.getEntityHitResult(this.level, this, startVec, endVec, this.getBoundingBox().expandTowards(this.getDeltaMovement()).inflate(1.0D), this::canHitEntity);
     }
 
     public void setDamage(float damage) {

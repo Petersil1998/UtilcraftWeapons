@@ -23,37 +23,37 @@ public class SmokeGrenade extends Item {
 
     public SmokeGrenade() {
         super(new Item.Properties()
-                .group(UtilcraftWeapons.ITEM_GROUP)
+                .tab(UtilcraftWeapons.ITEM_GROUP)
         );
     }
 
     @Nonnull
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
-        ItemStack itemstack = player.getHeldItem(hand);
+    public ActionResult<ItemStack> use(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
         //player.getCooldownTracker().setCooldown(this, 200);
-        if (!world.isRemote) {
+        if (!world.isClientSide) {
             DyeColor color = getColor(itemstack);
             SmokeGrenadeEntity smokeGrenadeEntity = new SmokeGrenadeEntity(world, player, color.getColorValue());
             smokeGrenadeEntity.setItem(itemstack);
-            smokeGrenadeEntity.func_234612_a_(player, player.rotationPitch, player.rotationYaw, 0.0F, 1.5F, 1.0F);
-            world.addEntity(smokeGrenadeEntity);
+            smokeGrenadeEntity.shootFromRotation(player, player.xRot, player.yRot, 0.0F, 1.5F, 1.0F);
+            world.addFreshEntity(smokeGrenadeEntity);
         }
 
-        player.addStat(Stats.ITEM_USED.get(this));
-        if (!player.abilities.isCreativeMode) {
+        player.awardStat(Stats.ITEM_USED.get(this));
+        if (!player.abilities.instabuild) {
             itemstack.shrink(1);
         }
 
-        return ActionResult.func_233538_a_(itemstack, world.isRemote());
+        return ActionResult.sidedSuccess(itemstack, world.isClientSide());
     }
 
     @Override
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flag) {
-        super.addInformation(stack, world, tooltip, flag);
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flag) {
+        super.appendHoverText(stack, world, tooltip, flag);
         DyeColor color = getColor(stack);
-        tooltip.add(new TranslationTextComponent(color.getTranslationKey())
-                .setStyle(Style.EMPTY.setColor(Color.fromInt(color.getTextColor())))
-                .mergeStyle(TextFormatting.ITALIC)
+        tooltip.add(new TranslationTextComponent(color.getName())
+                .setStyle(Style.EMPTY.withColor(Color.fromRgb(color.getTextColor())))
+                .withStyle(TextFormatting.ITALIC)
         );
     }
 

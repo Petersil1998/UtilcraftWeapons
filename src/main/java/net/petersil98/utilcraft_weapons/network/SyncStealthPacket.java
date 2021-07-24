@@ -34,7 +34,7 @@ public class SyncStealthPacket {
         ctx.get().enqueueWork(() -> {
             PlayerEntity player = Minecraft.getInstance().player;
             if(player != null) {
-                Entity entity = player.world.getEntityByID(entityID);
+                Entity entity = player.level.getEntity(entityID);
                 if (entity instanceof PlayerEntity) {
                     entity.getCapability(CapabilityStealth.STEALTH_CAPABILITY).ifPresent(iStealth -> iStealth.setStealth(stealth));
                 }

@@ -29,7 +29,7 @@ public class ShapelessStackRecipeBuilder {
 
     private final ItemStack result;
     private final List<Ingredient> ingredients = Lists.newArrayList();
-    private final Advancement.Builder advancement = Advancement.Builder.builder();
+    private final Advancement.Builder advancement = Advancement.Builder.advancement();
     private String group;
 
     private ShapelessStackRecipeBuilder(ItemStack result) {
@@ -61,7 +61,7 @@ public class ShapelessStackRecipeBuilder {
      * Adds an ingredient that can be any item in the given tag.
      */
     public ShapelessStackRecipeBuilder addIngredient(ITag<Item> tag) {
-        return this.addIngredient(Ingredient.fromTag(tag));
+        return this.addIngredient(Ingredient.of(tag));
     }
 
     /**
@@ -76,7 +76,7 @@ public class ShapelessStackRecipeBuilder {
      */
     public ShapelessStackRecipeBuilder addIngredient(IItemProvider item, int quantity) {
         for (int i = 0; i < quantity; ++i) {
-            this.addIngredient(Ingredient.fromItems(item));
+            this.addIngredient(Ingredient.of(item));
         }
 
         return this;
@@ -104,7 +104,7 @@ public class ShapelessStackRecipeBuilder {
      * Adds a criterion needed to unlock the recipe.
      */
     public ShapelessStackRecipeBuilder addCriterion(String name, ICriterionInstance criterion) {
-        this.advancement.withCriterion(name, criterion);
+        this.advancement.addCriterion(name, criterion);
         return this;
     }
 
@@ -137,12 +137,12 @@ public class ShapelessStackRecipeBuilder {
      */
     public void build(Consumer<IFinishedRecipe> consumerIn, ResourceLocation id) {
         this.validate(id);
-        this.advancement.withParentId(new ResourceLocation("recipes/root"))
-                .withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
-                .withRewards(AdvancementRewards.Builder.recipe(id))
-                .withRequirementsStrategy(IRequirementsStrategy.OR);
+        this.advancement.parent(new ResourceLocation("recipes/root"))
+                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
+                .rewards(AdvancementRewards.Builder.recipe(id))
+                .requirements(IRequirementsStrategy.OR);
         consumerIn.accept(new Result(id, this.result, this.group == null ? "" : this.group, this.ingredients, this.advancement, new ResourceLocation(id.getNamespace(),
-                "recipes/" + this.result.getItem().getGroup().getPath() + "/" + id.getPath())));
+                "recipes/" + this.result.getItem().getItemCategory().getRecipeFolderName() + "/" + id.getPath())));
     }
 
     /**
@@ -171,7 +171,7 @@ public class ShapelessStackRecipeBuilder {
             this.advancementId = advancementId;
         }
 
-        public void serialize(@Nonnull JsonObject json) {
+        public void serializeRecipeData(@Nonnull JsonObject json) {
             if (!this.group.isEmpty()) {
                 json.addProperty("group", this.group);
             }
@@ -179,7 +179,7 @@ public class ShapelessStackRecipeBuilder {
             JsonArray ingredientsJson = new JsonArray();
 
             for (Ingredient ingredient : this.ingredients) {
-                ingredientsJson.add(ingredient.serialize());
+                ingredientsJson.add(ingredient.toJson());
             }
 
             json.add("ingredients", ingredientsJson);
@@ -196,15 +196,15 @@ public class ShapelessStackRecipeBuilder {
         }
 
         @Nonnull
-        public IRecipeSerializer<?> getSerializer() {
-            return IRecipeSerializer.CRAFTING_SHAPELESS;
+        public IRecipeSerializer<?> getType() {
+            return IRecipeSerializer.SHAPELESS_RECIPE;
         }
 
         /**
          * Gets the ID for the recipe.
          */
         @Nonnull
-        public ResourceLocation getID() {
+        public ResourceLocation getId() {
             return this.id;
         }
 
@@ -212,15 +212,15 @@ public class ShapelessStackRecipeBuilder {
          * Gets the JSON for the advancement that unlocks this recipe. Null if there is no advancement.
          */
         @Nullable
-        public JsonObject getAdvancementJson() {
-            return this.advancement.serialize();
+        public JsonObject serializeAdvancement() {
+            return this.advancement.serializeToJson();
         }
 
         /**
          * Gets the ID for the advancement associated with this recipe. Should not be null if {@link #getAdvancementJson()} is non-null.
          */
         @Nullable
-        public ResourceLocation getAdvancementID() {
+        public ResourceLocation getAdvancementId() {
             return this.advancementId;
         }
     }

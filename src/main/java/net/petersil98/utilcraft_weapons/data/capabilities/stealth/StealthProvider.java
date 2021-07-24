@@ -30,17 +30,11 @@ public class StealthProvider implements ICapabilitySerializable<CompoundNBT> {
 
     @Override
     public CompoundNBT serializeNBT() {
-        if (CapabilityStealth.STEALTH_CAPABILITY == null) {
-            return new CompoundNBT();
-        } else {
-            return (CompoundNBT) CapabilityStealth.STEALTH_CAPABILITY.writeNBT(this.stealth, null);
-        }
+        return (CompoundNBT) CapabilityStealth.STEALTH_CAPABILITY.writeNBT(this.stealth, null);
     }
 
     @Override
     public void deserializeNBT(CompoundNBT nbt) {
-        if (CapabilityStealth.STEALTH_CAPABILITY != null) {
-            CapabilityStealth.STEALTH_CAPABILITY.readNBT(this.stealth, null, nbt);
-        }
+        CapabilityStealth.STEALTH_CAPABILITY.readNBT(this.stealth, null, nbt);
     }
 }

@@ -18,7 +18,7 @@ public class SmokeCloudParticleFactory implements IParticleFactory<SmokeCloudPar
     }
 
     @Override
-    public Particle makeParticle(@Nonnull SmokeCloudParticleData data, @Nonnull ClientWorld world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+    public Particle createParticle(@Nonnull SmokeCloudParticleData data, @Nonnull ClientWorld world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
         return new SmokeCloudParticle(world, x, y, z, this.spriteSet, data.getColor());
     }
 
@@ -29,7 +29,7 @@ public class SmokeCloudParticleFactory implements IParticleFactory<SmokeCloudPar
 
         @Nonnull
         @Override
-        public Codec<SmokeCloudParticleData> func_230522_e_() {
+        public Codec<SmokeCloudParticleData> codec() {
             return SmokeCloudParticleData.CODEC;
         }
     }

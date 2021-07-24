@@ -17,7 +17,7 @@ public class KnifeDamageSource extends EntityDamageSource {
 
     @Override
     @Nonnull
-    public ITextComponent getDeathMessage(@Nonnull LivingEntity killedEntity) {
-        return new TranslationTextComponent(String.format("%s.kill.knife", UtilcraftWeapons.MOD_ID), killedEntity.getDisplayName().getString(), this.damageSourceEntity.getDisplayName().getString());
+    public ITextComponent getLocalizedDeathMessage(@Nonnull LivingEntity killedEntity) {
+        return new TranslationTextComponent(String.format("%s.kill.knife", UtilcraftWeapons.MOD_ID), killedEntity.getDisplayName().getString(), this.entity.getDisplayName().getString());
     }
 }

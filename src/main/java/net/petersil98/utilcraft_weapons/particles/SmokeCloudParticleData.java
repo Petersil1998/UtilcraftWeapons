@@ -11,6 +11,8 @@ import net.minecraft.util.ColorHelper;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.particles.IParticleData.IDeserializer;
+
 public class SmokeCloudParticleData implements IParticleData {
 
     private final int color;
@@ -30,16 +32,16 @@ public class SmokeCloudParticleData implements IParticleData {
     }
 
     @Override
-    public void write(PacketBuffer buffer) {
-        buffer.writeInt(ColorHelper.PackedColor.getRed(this.color));
-        buffer.writeInt(ColorHelper.PackedColor.getGreen(this.color));
-        buffer.writeInt(ColorHelper.PackedColor.getBlue(this.color));
+    public void writeToNetwork(PacketBuffer buffer) {
+        buffer.writeInt(ColorHelper.PackedColor.red(this.color));
+        buffer.writeInt(ColorHelper.PackedColor.green(this.color));
+        buffer.writeInt(ColorHelper.PackedColor.blue(this.color));
     }
 
     @Nonnull
     @Override
-    public String getParameters() {
-        return String.format("%d %d %d", ColorHelper.PackedColor.getRed(this.color), ColorHelper.PackedColor.getGreen(this.color), ColorHelper.PackedColor.getBlue(this.color));
+    public String writeToString() {
+        return String.format("%d %d %d", ColorHelper.PackedColor.red(this.color), ColorHelper.PackedColor.green(this.color), ColorHelper.PackedColor.blue(this.color));
     }
 
     public static final Codec<SmokeCloudParticleData> CODEC = RecordCodecBuilder.create(
@@ -52,14 +54,14 @@ public class SmokeCloudParticleData implements IParticleData {
 
         @Nonnull
         @Override
-        public SmokeCloudParticleData deserialize(@Nonnull ParticleType<SmokeCloudParticleData> particleTypeIn, @Nonnull StringReader reader) throws CommandSyntaxException {
-            return new SmokeCloudParticleData(ColorHelper.PackedColor.packColor(255, reader.readInt(), reader.readInt(), reader.readInt()));
+        public SmokeCloudParticleData fromCommand(@Nonnull ParticleType<SmokeCloudParticleData> particleTypeIn, @Nonnull StringReader reader) throws CommandSyntaxException {
+            return new SmokeCloudParticleData(ColorHelper.PackedColor.color(255, reader.readInt(), reader.readInt(), reader.readInt()));
         }
 
         @Nonnull
         @Override
-        public SmokeCloudParticleData read(@Nonnull ParticleType<SmokeCloudParticleData> particleType, @Nonnull PacketBuffer buffer) {
-            return new SmokeCloudParticleData(ColorHelper.PackedColor.packColor(buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt()));
+        public SmokeCloudParticleData fromNetwork(@Nonnull ParticleType<SmokeCloudParticleData> particleType, @Nonnull PacketBuffer buffer) {
+            return new SmokeCloudParticleData(ColorHelper.PackedColor.color(buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt()));
         }
     };
 }

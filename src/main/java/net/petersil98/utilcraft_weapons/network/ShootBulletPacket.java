@@ -26,9 +26,9 @@ public class ShootBulletPacket {
         ctx.get().enqueueWork(() -> {
             ServerPlayerEntity player = ctx.get().getSender();
             if(player != null) {
-                Item item = player.getHeldItem(player.getActiveHand()).getItem();
+                Item item = player.getItemInHand(player.getUsedItemHand()).getItem();
                 if(item instanceof SniperRifle) {
-                    successful.set(((SniperRifle) item).shootBullet(player.world, player, player.getActiveHand()));
+                    successful.set(((SniperRifle) item).shootBullet(player.level, player, player.getUsedItemHand()));
                 }
             }
         });

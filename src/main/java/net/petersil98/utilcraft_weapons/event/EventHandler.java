@@ -35,13 +35,13 @@ import java.lang.reflect.Field;
 @Mod.EventBusSubscriber(modid = UtilcraftWeapons.MOD_ID)
 public class EventHandler {
 
-    private static final Field shadowSize = ObfuscationReflectionHelper.findField(EntityRenderer.class, "field_76989_e");
+    private static final Field shadowSize = ObfuscationReflectionHelper.findField(EntityRenderer.class, "shadowRadius");
     private static float defaultShadowSize;
 
     @SubscribeEvent
     public static void onFOVUpdateEvent(@Nonnull FOVUpdateEvent event) {
         PlayerEntity player = event.getEntity();
-        if(player.getHeldItemMainhand().getItem() instanceof SniperRifle && ((SniperRifle) player.getHeldItemMainhand().getItem()).isZoomedIn()) {
+        if(player.getMainHandItem().getItem() instanceof SniperRifle && ((SniperRifle) player.getMainHandItem().getItem()).isZoomedIn()) {
             event.setNewfov(event.getNewfov() * 0.35f);
         }
     }
@@ -49,7 +49,7 @@ public class EventHandler {
     @SubscribeEvent
     public static void onMouseClickEvent(@Nonnull InputEvent.MouseInputEvent event) {
         PlayerEntity player = Minecraft.getInstance().player;
-        if(player != null && player.getHeldItemMainhand().getItem() instanceof SniperRifle && event.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT && event.getAction() == GLFW.GLFW_PRESS) {
+        if(player != null && player.getMainHandItem().getItem() instanceof SniperRifle && event.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT && event.getAction() == GLFW.GLFW_PRESS) {
             PacketHandler.sendToServer(new ShootBulletPacket());
         }
     }
@@ -76,7 +76,7 @@ public class EventHandler {
     @SubscribeEvent
     public static void potionColorCalculationEvent(@Nonnull PotionColorCalculationEvent event) {
         event.getEffects().forEach(effectInstance -> {
-            if(effectInstance.getPotion() instanceof StealthEffect) {
+            if(effectInstance.getEffect() instanceof StealthEffect) {
                 event.shouldHideParticles(true);
             }
         });
@@ -86,11 +86,11 @@ public class EventHandler {
     public static void livingAttackEvent(@Nonnull LivingAttackEvent event) {
         if(event.getSource() instanceof EntityDamageSource && !(event.getSource() instanceof KnifeDamageSource)) {
             EntityDamageSource damageSource = (EntityDamageSource) event.getSource();
-            if(damageSource.getTrueSource() instanceof ServerPlayerEntity) {
-                ServerPlayerEntity attacker = (ServerPlayerEntity) damageSource.getTrueSource();
-                if (attacker.getHeldItemMainhand().getItem() instanceof AssassinsKnife) {
+            if(damageSource.getEntity() instanceof ServerPlayerEntity) {
+                ServerPlayerEntity attacker = (ServerPlayerEntity) damageSource.getEntity();
+                if (attacker.getMainHandItem().getItem() instanceof AssassinsKnife) {
                     event.setCanceled(true);
-                    event.getEntity().attackEntityFrom(new KnifeDamageSource(damageSource.getTrueSource()), event.getAmount());
+                    event.getEntity().hurt(new KnifeDamageSource(damageSource.getEntity()), event.getAmount());
                 }
             }
         }
@@ -100,7 +100,7 @@ public class EventHandler {
     public static void playerLoginEvent(@Nonnull PlayerEvent.PlayerLoggedInEvent event) {
         if(event.getEntity() instanceof ServerPlayerEntity) {
             ServerPlayerEntity player = (ServerPlayerEntity) event.getEntity();
-            player.getCapability(CapabilityStealth.STEALTH_CAPABILITY).ifPresent(iStealth -> PacketHandler.sendToClients(new SyncStealthPacket(iStealth.isStealth(), player.getEntityId()), player));
+            player.getCapability(CapabilityStealth.STEALTH_CAPABILITY).ifPresent(iStealth -> PacketHandler.sendToClients(new SyncStealthPacket(iStealth.isStealth(), player.getId()), player));
         }
     }
 

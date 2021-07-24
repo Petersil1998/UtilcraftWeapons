@@ -48,7 +48,7 @@ public class Recipes extends RecipeProvider {
     }
 
     @Override
-    protected void registerRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
+    protected void buildShapelessRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
         registerShapedRecipes(consumer);
         registerShapelessRecipes(consumer);
         registerSmeltingRecipes(consumer);
@@ -77,8 +77,8 @@ public class Recipes extends RecipeProvider {
             ShapelessStackRecipeBuilder.shapelessRecipe(stack)
                     .addIngredient(UtilcraftWeaponsItems.SMOKE_GRENADE)
                     .addIngredient(color.colorTag)
-                    .addCriterion("smoke_grenade", InventoryChangeTrigger.Instance.forItems(UtilcraftWeaponsItems.SMOKE_GRENADE))
-                    .addCriterion(color.colorName + "_dye", InventoryChangeTrigger.Instance.forItems(ItemPredicate.Builder.create().tag(color.colorTag).build()))
+                    .addCriterion("smoke_grenade", InventoryChangeTrigger.Instance.hasItems(UtilcraftWeaponsItems.SMOKE_GRENADE))
+                    .addCriterion(color.colorName + "_dye", InventoryChangeTrigger.Instance.hasItems(ItemPredicate.Builder.item().of(color.colorTag).build()))
                     .build(consumer, path);
         }
     }

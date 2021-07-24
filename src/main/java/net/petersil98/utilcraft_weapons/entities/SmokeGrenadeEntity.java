@@ -29,7 +29,7 @@ public class SmokeGrenadeEntity extends ProjectileItemEntity {
     private int radius;
     private int color;
 
-    public static final DataParameter<Integer> COLOR_DATA = EntityDataManager.createKey(SmokeGrenadeEntity.class, DataSerializers.VARINT);
+    public static final DataParameter<Integer> COLOR_DATA = EntityDataManager.defineId(SmokeGrenadeEntity.class, DataSerializers.INT);
 
     public SmokeGrenadeEntity(EntityType<? extends SmokeGrenadeEntity> entityType, World world) {
         super(entityType, world);
@@ -39,14 +39,14 @@ public class SmokeGrenadeEntity extends ProjectileItemEntity {
 
     public SmokeGrenadeEntity(World world, LivingEntity thrower, int color) {
         super(UtilcraftWeaponsEntities.SMOKE_GRENADE_ENTITY, thrower, world);
-        this.getDataManager().set(COLOR_DATA, color);
+        this.getEntityData().set(COLOR_DATA, color);
         this.color = color;
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.getDataManager().register(COLOR_DATA, color);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.getEntityData().define(COLOR_DATA, color);
     }
 
     @Nonnull
@@ -58,19 +58,19 @@ public class SmokeGrenadeEntity extends ProjectileItemEntity {
      * Called when the arrow hits an entity
      */
     @Override
-    protected void onEntityHit(@Nonnull EntityRayTraceResult rayTraceResult) {
-        super.onEntityHit(rayTraceResult);
-        rayTraceResult.getEntity().attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()), 0.0F);
+    protected void onHitEntity(@Nonnull EntityRayTraceResult rayTraceResult) {
+        super.onHitEntity(rayTraceResult);
+        rayTraceResult.getEntity().hurt(DamageSource.thrown(this, this.getOwner()), 0.0F);
     }
 
     /**
      * Called when this EntityFireball hits a block or entity.
      */
     @Override
-    protected void onImpact(@Nonnull RayTraceResult result) {
-        super.onImpact(result);
+    protected void onHit(@Nonnull RayTraceResult result) {
+        super.onHit(result);
         this.hasLanded = true;
-        if (!this.world.isRemote && this.isAlive()) {
+        if (!this.level.isClientSide && this.isAlive()) {
             this.remove();
         }
     }
@@ -80,7 +80,7 @@ public class SmokeGrenadeEntity extends ProjectileItemEntity {
      */
     @Override
     public void tick() {
-        Entity entity = this.func_234616_v_();
+        Entity entity = this.getOwner();
         if (entity instanceof PlayerEntity && !entity.isAlive() && !this.hasLanded) {
             this.remove();
         } else {
@@ -94,9 +94,9 @@ public class SmokeGrenadeEntity extends ProjectileItemEntity {
 
     @Nullable
     public Entity changeDimension(@Nonnull ServerWorld server, @Nonnull ITeleporter teleporter) {
-        Entity entity = this.func_234616_v_();
-        if (entity != null && entity.world.getDimensionKey() != server.getDimensionKey()) {
-            this.setShooter(null);
+        Entity entity = this.getOwner();
+        if (entity != null && entity.level.dimension() != server.dimension()) {
+            this.setOwner(null);
         }
 
         return super.changeDimension(server, teleporter);
@@ -104,7 +104,7 @@ public class SmokeGrenadeEntity extends ProjectileItemEntity {
 
     @Override
     @Nonnull
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -115,7 +115,7 @@ public class SmokeGrenadeEntity extends ProjectileItemEntity {
                     double distance = Math.sqrt(x * x + z * z);
                     double distance3D = Math.sqrt(y * y + distance * distance);
                     if (distance3D <= this.radius && distance3D > this.radius-(this.radius/5.0)) {
-                        this.world.addParticle(new SmokeCloudParticleData(this.getDataManager().get(COLOR_DATA)), this.getPosX() + x, this.getPosY() + y, this.getPosZ() + z, 0, 0, 0);
+                        this.level.addParticle(new SmokeCloudParticleData(this.getEntityData().get(COLOR_DATA)), this.getX() + x, this.getY() + y, this.getZ() + z, 0, 0, 0);
                     }
                 }
             }
