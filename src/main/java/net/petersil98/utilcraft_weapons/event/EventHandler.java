@@ -35,7 +35,7 @@ import java.lang.reflect.Field;
 @Mod.EventBusSubscriber(modid = UtilcraftWeapons.MOD_ID)
 public class EventHandler {
 
-    private static final Field shadowSize = ObfuscationReflectionHelper.findField(EntityRenderer.class, "shadowRadius");
+    private static final Field shadowSize = ObfuscationReflectionHelper.findField(EntityRenderer.class, "field_76989_e");
     private static float defaultShadowSize;
 
     @SubscribeEvent
