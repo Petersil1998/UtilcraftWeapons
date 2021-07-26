@@ -30,7 +30,7 @@ public class SmokeGrenade extends Item {
     @Nonnull
     public ActionResult<ItemStack> use(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
-        //player.getCooldownTracker().setCooldown(this, 200);
+        player.getCooldowns().addCooldown(this, 200);
         if (!world.isClientSide) {
             DyeColor color = getColor(itemstack);
             SmokeGrenadeEntity smokeGrenadeEntity = new SmokeGrenadeEntity(world, player, color.getColorValue());

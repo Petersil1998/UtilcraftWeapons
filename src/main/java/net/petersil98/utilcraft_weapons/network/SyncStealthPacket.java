@@ -4,6 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.petersil98.utilcraft_weapons.data.capabilities.stealth.CapabilityStealth;
 
@@ -31,15 +33,15 @@ public class SyncStealthPacket {
     }
 
     public boolean handle(@Nonnull Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            PlayerEntity player = Minecraft.getInstance().player;
-            if(player != null) {
-                Entity entity = player.level.getEntity(entityID);
+        ctx.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
+            net.minecraft.client.entity.player.ClientPlayerEntity player = Minecraft.getInstance().player;
+            if (player != null) {
+                Entity entity = player.level.getEntity(this.entityID);
                 if (entity instanceof PlayerEntity) {
-                    entity.getCapability(CapabilityStealth.STEALTH_CAPABILITY).ifPresent(iStealth -> iStealth.setStealth(stealth));
+                    entity.getCapability(CapabilityStealth.STEALTH_CAPABILITY).ifPresent(iStealth -> iStealth.setStealth(this.stealth));
                 }
             }
-        });
+        }));
         return true;
     }
 }

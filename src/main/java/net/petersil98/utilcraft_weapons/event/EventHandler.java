@@ -1,7 +1,6 @@
 package net.petersil98.utilcraft_weapons.event;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -9,14 +8,12 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.PotionColorCalculationEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.petersil98.utilcraft_weapons.UtilcraftWeapons;
 import net.petersil98.utilcraft_weapons.combat.KnifeDamageSource;
 import net.petersil98.utilcraft_weapons.data.capabilities.stealth.CapabilityStealth;
@@ -30,13 +27,9 @@ import net.petersil98.utilcraft_weapons.network.SyncStealthPacket;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nonnull;
-import java.lang.reflect.Field;
 
 @Mod.EventBusSubscriber(modid = UtilcraftWeapons.MOD_ID)
 public class EventHandler {
-
-    private static final Field shadowSize = ObfuscationReflectionHelper.findField(EntityRenderer.class, "field_76989_e");
-    private static float defaultShadowSize;
 
     @SubscribeEvent
     public static void onFOVUpdateEvent(@Nonnull FOVUpdateEvent event) {
@@ -44,33 +37,6 @@ public class EventHandler {
         if(player.getMainHandItem().getItem() instanceof SniperRifle && ((SniperRifle) player.getMainHandItem().getItem()).isZoomedIn()) {
             event.setNewfov(event.getNewfov() * 0.35f);
         }
-    }
-
-    @SubscribeEvent
-    public static void onMouseClickEvent(@Nonnull InputEvent.MouseInputEvent event) {
-        PlayerEntity player = Minecraft.getInstance().player;
-        if(player != null && player.getMainHandItem().getItem() instanceof SniperRifle && event.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT && event.getAction() == GLFW.GLFW_PRESS) {
-            PacketHandler.sendToServer(new ShootBulletPacket());
-        }
-    }
-
-    @SubscribeEvent
-    public static void renderPlayerEvent(@Nonnull RenderPlayerEvent event) {
-        PlayerEntity playerEntity = event.getPlayer();
-        playerEntity.getCapability(CapabilityStealth.STEALTH_CAPABILITY).ifPresent(iStealth -> {
-            try {
-                float f = shadowSize.getFloat(event.getRenderer());
-                if (f != 0.0f) {
-                    defaultShadowSize = f;
-                }
-                if (iStealth.isStealth()) {
-                    shadowSize.setFloat(event.getRenderer(), 0.0f);
-                    event.setCanceled(true);
-                } else {
-                    shadowSize.setFloat(event.getRenderer(), defaultShadowSize);
-                }
-            } catch (IllegalAccessException ignored) {}
-        });
     }
 
     @SubscribeEvent

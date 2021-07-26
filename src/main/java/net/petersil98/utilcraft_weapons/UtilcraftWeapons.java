@@ -51,8 +51,6 @@ public class UtilcraftWeapons
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         // Register the doClientStuff method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
-
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -61,11 +59,6 @@ public class UtilcraftWeapons
     {
         CapabilityStealth.register();
         PacketHandler.registerMessages();
-    }
-
-    private void doClientStuff(@Nonnull final FMLClientSetupEvent event) {
-        RenderingRegistry.registerEntityRenderingHandler(UtilcraftWeaponsEntities.BULLET_ENTITY, BulletRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(UtilcraftWeaponsEntities.SMOKE_GRENADE_ENTITY, manager -> new SpriteRenderer<>(manager, event.getMinecraftSupplier().get().getItemRenderer()));
     }
 
     @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
