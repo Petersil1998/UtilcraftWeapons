@@ -1,0 +1,108 @@
+package net.petersil98.utilcraft_weapons;
+
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.petersil98.utilcraft_weapons.data.capabilities.stealth.CapabilityStealth;
+import net.petersil98.utilcraft_weapons.effects.StealthEffect;
+import net.petersil98.utilcraft_weapons.entities.BulletEntity;
+import net.petersil98.utilcraft_weapons.entities.SmokeGrenadeEntity;
+import net.petersil98.utilcraft_weapons.entities.UtilcraftWeaponsEntities;
+import net.petersil98.utilcraft_weapons.items.*;
+import net.petersil98.utilcraft_weapons.network.PacketHandler;
+import net.petersil98.utilcraft_weapons.particles.SmokeCloudParticleFactory;
+import net.petersil98.utilcraft_weapons.particles.UtilcraftWeaponsParticleTypes;
+import net.petersil98.utilcraft_weapons.renderer.BulletRenderer;
+
+import javax.annotation.Nonnull;
+
+@Mod(UtilcraftWeapons.MOD_ID)
+public class UtilcraftWeapons
+{
+    public static final String MOD_ID = "utilcraft_weapons";
+
+    public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab(MOD_ID) {
+
+        @Nonnull
+        @Override
+        public ItemStack makeIcon() {
+            return new ItemStack(UtilcraftWeaponsItems.ASSASSINS_KNIFE);
+        }
+    };
+
+    public UtilcraftWeapons() {
+        // Register the setup method for modloading
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        // Register the doClientStuff method for modloading
+
+        // Register ourselves for server and other game events we are interested in
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    private void setup(final FMLCommonSetupEvent event)
+    {
+        CapabilityStealth.register();
+        PacketHandler.registerMessages();
+    }
+
+    @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
+    public static class RegistryEvents {
+        @SubscribeEvent
+        public static void registerBlocks(final RegistryEvent.Register<Block> blockRegistryEvent) {
+        }
+
+        @SubscribeEvent
+        public static void registerItems(@Nonnull final RegistryEvent.Register<Item> itemRegistryEvent) {
+            itemRegistryEvent.getRegistry().register(new AssassinsKnife().setRegistryName("assassins_knife"));
+            itemRegistryEvent.getRegistry().register(new SniperRifle().setRegistryName("sniper_rifle"));
+            itemRegistryEvent.getRegistry().register(new BulletItem().setRegistryName("bullet"));
+            itemRegistryEvent.getRegistry().register(new SmokeGrenade().setRegistryName("smoke_grenade"));
+        }
+
+        @SubscribeEvent
+        public static void registerEffects(@Nonnull final RegistryEvent.Register<MobEffect> effectRegistryEvent) {
+            effectRegistryEvent.getRegistry().register(new StealthEffect().setRegistryName("stealth"));
+        }
+
+        @SubscribeEvent
+        public static void registerEntities(@Nonnull final RegistryEvent.Register<EntityType<?>> entityRegister) {
+            entityRegister.getRegistry().register(EntityType.Builder.<BulletEntity>of(BulletEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(20).build("bullet_entity").setRegistryName("bullet_entity"));
+            entityRegister.getRegistry().register(EntityType.Builder.<SmokeGrenadeEntity>of(SmokeGrenadeEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10).build("smoke_grenade_entity").setRegistryName("smoke_grenade_entity"));
+        }
+        @SubscribeEvent
+        public static void registerParticleTypes(@Nonnull final RegistryEvent.Register<ParticleType<?>> particleTypeRegister) {
+            particleTypeRegister.getRegistry().register(new SmokeCloudParticleFactory.SmokeCloudParticleType().setRegistryName("smoke_cloud"));
+        }
+    }
+
+    @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD,value= Dist.CLIENT)
+    public static class RegistryParticle {
+
+        @SubscribeEvent
+        public static void registerParticles(ParticleFactoryRegisterEvent event) {
+            Minecraft.getInstance().particleEngine.register(UtilcraftWeaponsParticleTypes.SMOKE_CLOUD, SmokeCloudParticleFactory::new);
+        }
+
+        @SubscribeEvent
+        public static void entityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+            event.registerEntityRenderer(UtilcraftWeaponsEntities.BULLET_ENTITY, BulletRenderer::new);
+            event.registerEntityRenderer(UtilcraftWeaponsEntities.SMOKE_GRENADE_ENTITY, ThrownItemRenderer::new);
+        }
+    }
+}

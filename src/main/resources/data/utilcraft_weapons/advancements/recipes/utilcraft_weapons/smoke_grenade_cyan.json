@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "utilcraft_weapons:smoke_grenade_cyan"
+    ]
+  },
+  "criteria": {
+    "smoke_grenade": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "utilcraft_weapons:smoke_grenade"
+          }
+        ]
+      }
+    },
+    "cyan_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:dyes/cyan"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "utilcraft_weapons:smoke_grenade_cyan"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "smoke_grenade",
+      "cyan_dye",
+      "has_the_recipe"
+    ]
+  ]
+}

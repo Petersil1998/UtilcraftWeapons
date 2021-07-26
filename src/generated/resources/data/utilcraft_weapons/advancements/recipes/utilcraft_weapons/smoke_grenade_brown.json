@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "utilcraft_weapons:smoke_grenade_brown"
+    ]
+  },
+  "criteria": {
+    "smoke_grenade": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "utilcraft_weapons:smoke_grenade"
+          }
+        ]
+      }
+    },
+    "brown_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:dyes/brown"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "utilcraft_weapons:smoke_grenade_brown"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "smoke_grenade",
+      "brown_dye",
+      "has_the_recipe"
+    ]
+  ]
+}
