@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -44,6 +45,7 @@ public class UtilcraftWeapons
     public UtilcraftWeapons() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         eventBus.addListener(this::setup);
+        eventBus.addListener(this::registerCapabilities);
 
         UtilcraftWeaponsItems.ITEMS.register(eventBus);
         UtilcraftWeaponsEntities.ENTITIES.register(eventBus);
@@ -51,10 +53,12 @@ public class UtilcraftWeapons
         UtilcraftWeaponsParticleTypes.PARTICLES.register(eventBus);
     }
 
-    private void setup(final FMLCommonSetupEvent event)
-    {
-        CapabilityStealth.register();
+    private void setup(final FMLCommonSetupEvent event) {
         PacketHandler.registerMessages();
+    }
+
+    private void registerCapabilities(final RegisterCapabilitiesEvent event) {
+        CapabilityStealth.register(event);
     }
 
     @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD,value= Dist.CLIENT)
