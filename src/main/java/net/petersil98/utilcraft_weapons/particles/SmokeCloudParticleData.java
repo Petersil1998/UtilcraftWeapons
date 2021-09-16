@@ -11,8 +11,6 @@ import net.minecraft.util.ColorHelper;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.particles.IParticleData.IDeserializer;
-
 public class SmokeCloudParticleData implements IParticleData {
 
     private final int color;
@@ -24,7 +22,7 @@ public class SmokeCloudParticleData implements IParticleData {
     @Nonnull
     @Override
     public ParticleType<?> getType() {
-        return UtilcraftWeaponsParticleTypes.SMOKE_CLOUD;
+        return UtilcraftWeaponsParticleTypes.SMOKE_CLOUD.get();
     }
 
     public int getColor() {

@@ -18,8 +18,8 @@ public class ItemModels extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        registerHandheld(UtilcraftWeaponsItems.SNIPER_RIFLE);
-        registerHandheld(UtilcraftWeaponsItems.SMOKE_GRENADE);
+        registerHandheld(UtilcraftWeaponsItems.SNIPER_RIFLE.get());
+        registerHandheld(UtilcraftWeaponsItems.SMOKE_GRENADE.get());
     }
 
     private void registerHandheld(Item item) {

@@ -15,7 +15,7 @@ public class ClientSetup {
 
     @SubscribeEvent
     public static void registerEntityRenderers(FMLClientSetupEvent event) {
-        RenderingRegistry.registerEntityRenderingHandler(UtilcraftWeaponsEntities.BULLET_ENTITY, BulletRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(UtilcraftWeaponsEntities.SMOKE_GRENADE_ENTITY, manager -> new SpriteRenderer<>(manager, event.getMinecraftSupplier().get().getItemRenderer()));
+        RenderingRegistry.registerEntityRenderingHandler(UtilcraftWeaponsEntities.BULLET_ENTITY.get(), BulletRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(UtilcraftWeaponsEntities.SMOKE_GRENADE_ENTITY.get(), manager -> new SpriteRenderer<>(manager, event.getMinecraftSupplier().get().getItemRenderer()));
     }
 }

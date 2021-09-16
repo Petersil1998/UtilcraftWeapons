@@ -8,11 +8,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ColorHelper;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
-import net.petersil98.utilcraft_weapons.UtilcraftWeapons;
 import net.petersil98.utilcraft_weapons.entities.SmokeGrenadeEntity;
 
 import javax.annotation.Nonnull;
@@ -21,10 +19,8 @@ import java.util.List;
 
 public class SmokeGrenade extends Item {
 
-    public SmokeGrenade() {
-        super(new Item.Properties()
-                .tab(UtilcraftWeapons.ITEM_GROUP)
-        );
+    public SmokeGrenade(Properties properties) {
+        super(properties);
     }
 
     @Nonnull

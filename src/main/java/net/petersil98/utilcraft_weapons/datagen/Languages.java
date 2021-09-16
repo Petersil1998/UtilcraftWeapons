@@ -5,7 +5,6 @@ import net.minecraftforge.common.data.LanguageProvider;
 import net.petersil98.utilcraft_weapons.UtilcraftWeapons;
 import net.petersil98.utilcraft_weapons.effects.UtilcraftWeaponsEffects;
 import net.petersil98.utilcraft_weapons.items.UtilcraftWeaponsItems;
-import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
 
@@ -29,11 +28,11 @@ public class Languages {
 
         @Override
         protected void addTranslations() {
-            add(UtilcraftWeaponsItems.ASSASSINS_KNIFE, "Assassin's Knife");
-            add(UtilcraftWeaponsItems.SNIPER_RIFLE, "Sniper Rifle");
-            add(UtilcraftWeaponsEffects.STEALTH, "Stealth");
-            add(UtilcraftWeaponsItems.BULLET_ITEM,"Bullet");
-            add(UtilcraftWeaponsItems.SMOKE_GRENADE, "Smoke Grenade");
+            add(UtilcraftWeaponsItems.ASSASSINS_KNIFE.get(), "Assassin's Knife");
+            add(UtilcraftWeaponsItems.SNIPER_RIFLE.get(), "Sniper Rifle");
+            add(UtilcraftWeaponsEffects.STEALTH.get(), "Stealth");
+            add(UtilcraftWeaponsItems.BULLET_ITEM.get(),"Bullet");
+            add(UtilcraftWeaponsItems.SMOKE_GRENADE.get(), "Smoke Grenade");
 
             add(String.format("itemGroup.%s", UtilcraftWeapons.MOD_ID), "Utilcraft Weapons");
 

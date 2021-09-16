@@ -29,7 +29,7 @@ public class BulletEntity extends ProjectileEntity {
     }
 
     public BulletEntity(World world, double x, double y, double z) {
-        this(UtilcraftWeaponsEntities.BULLET_ENTITY, world);
+        this(UtilcraftWeaponsEntities.BULLET_ENTITY.get(), world);
         this.setPos(x, y, z);
     }
 

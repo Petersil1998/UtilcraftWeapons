@@ -7,13 +7,10 @@ import net.minecraft.item.ShootableItem;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-import net.petersil98.utilcraft_weapons.UtilcraftWeapons;
 import net.petersil98.utilcraft_weapons.entities.BulletEntity;
 
 import javax.annotation.Nonnull;
 import java.util.function.Predicate;
-
-import net.minecraft.item.Item.Properties;
 
 public class SniperRifle extends ShootableItem {
 
@@ -21,11 +18,8 @@ public class SniperRifle extends ShootableItem {
 
     public static final Predicate<ItemStack> BULLETS = (stack) -> stack.getItem() instanceof BulletItem;
 
-    public SniperRifle() {
-        super(new Properties()
-                .stacksTo(1)
-                .tab(UtilcraftWeapons.ITEM_GROUP)
-        );
+    public SniperRifle(Properties properties) {
+        super(properties);
     }
 
     @Override
