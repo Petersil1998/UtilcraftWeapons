@@ -40,7 +40,9 @@ public class ClientEventHandler {
                 } else {
                     shadowSize.setFloat(event.getRenderer(), defaultShadowSize);
                 }
-            } catch (IllegalAccessException ignored) {}
+            } catch (IllegalAccessException e) {
+                UtilcraftWeapons.LOGGER.error("Couldn't access Players shadowSize", e);
+            }
         });
     }
 

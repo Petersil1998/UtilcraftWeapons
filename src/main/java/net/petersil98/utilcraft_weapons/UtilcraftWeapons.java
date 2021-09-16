@@ -36,6 +36,7 @@ public class UtilcraftWeapons
         }
     };
 
+    public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     public UtilcraftWeapons() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
