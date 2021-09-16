@@ -33,7 +33,7 @@ public class SyncStealthPacket {
     }
 
     public boolean handle(@Nonnull Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
+        ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             net.minecraft.client.entity.player.ClientPlayerEntity player = Minecraft.getInstance().player;
             if (player != null) {
                 Entity entity = player.level.getEntity(this.entityID);
