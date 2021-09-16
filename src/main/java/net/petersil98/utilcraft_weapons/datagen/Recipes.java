@@ -2,11 +2,13 @@ package net.petersil98.utilcraft_weapons.datagen;
 
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.data.*;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.petersil98.utilcraft_weapons.items.SmokeGrenade;
 import net.petersil98.utilcraft_weapons.items.UtilcraftWeaponsItems;
@@ -16,9 +18,6 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeProvider;
 
 public class Recipes extends RecipeProvider {
 
@@ -69,13 +68,13 @@ public class Recipes extends RecipeProvider {
 
     private void registerSmokeGrenadeColors(Consumer<FinishedRecipe> consumer) {
         for(ColorEntry color: COLORS) {
-            ItemStack stack = new ItemStack(UtilcraftWeaponsItems.SMOKE_GRENADE);
+            ItemStack stack = new ItemStack(UtilcraftWeaponsItems.SMOKE_GRENADE.get());
             SmokeGrenade.setColor(stack, color.dyeColor);
-            ResourceLocation path = new ResourceLocation(BlockItemUtils.namespace(UtilcraftWeaponsItems.SMOKE_GRENADE), BlockItemUtils.name(UtilcraftWeaponsItems.SMOKE_GRENADE) + "_" + color.colorName);
+            ResourceLocation path = new ResourceLocation(BlockItemUtils.namespace(UtilcraftWeaponsItems.SMOKE_GRENADE.get()), BlockItemUtils.name(UtilcraftWeaponsItems.SMOKE_GRENADE.get()) + "_" + color.colorName);
             ShapelessStackRecipeBuilder.shapelessRecipe(stack)
-                    .addIngredient(UtilcraftWeaponsItems.SMOKE_GRENADE)
+                    .addIngredient(UtilcraftWeaponsItems.SMOKE_GRENADE.get())
                     .addIngredient(color.colorTag)
-                    .addCriterion("smoke_grenade", InventoryChangeTrigger.TriggerInstance.hasItems(UtilcraftWeaponsItems.SMOKE_GRENADE))
+                    .addCriterion("smoke_grenade", InventoryChangeTrigger.TriggerInstance.hasItems(UtilcraftWeaponsItems.SMOKE_GRENADE.get()))
                     .addCriterion(color.colorName + "_dye", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(color.colorTag).build()))
                     .build(consumer, path);
         }

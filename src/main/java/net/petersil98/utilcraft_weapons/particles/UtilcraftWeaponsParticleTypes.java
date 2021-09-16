@@ -1,11 +1,14 @@
 package net.petersil98.utilcraft_weapons.particles;
 
-import net.minecraftforge.registries.ObjectHolder;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.petersil98.utilcraft_weapons.UtilcraftWeapons;
 
-@ObjectHolder(UtilcraftWeapons.MOD_ID)
 public class UtilcraftWeaponsParticleTypes {
 
-    @ObjectHolder("smoke_cloud")
-    public static SmokeCloudParticleFactory.SmokeCloudParticleType SMOKE_CLOUD;
+    public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, UtilcraftWeapons.MOD_ID);
+
+    public static final RegistryObject<SmokeCloudParticleFactory.SmokeCloudParticleType> SMOKE_CLOUD = PARTICLES.register("smoke_cloud", SmokeCloudParticleFactory.SmokeCloudParticleType::new);
 }

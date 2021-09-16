@@ -1,18 +1,17 @@
 package net.petersil98.utilcraft_weapons.entities;
 
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
-import net.minecraft.world.item.Item;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import net.petersil98.utilcraft_weapons.items.UtilcraftWeaponsItems;
@@ -34,7 +33,7 @@ public class SmokeGrenadeEntity extends ThrowableItemProjectile {
     }
 
     public SmokeGrenadeEntity(Level world, LivingEntity thrower, int color) {
-        super(UtilcraftWeaponsEntities.SMOKE_GRENADE_ENTITY, thrower, world);
+        super(UtilcraftWeaponsEntities.SMOKE_GRENADE_ENTITY.get(), thrower, world);
         this.getEntityData().set(COLOR_DATA, color);
         this.color = color;
     }
@@ -47,7 +46,7 @@ public class SmokeGrenadeEntity extends ThrowableItemProjectile {
 
     @Nonnull
     protected Item getDefaultItem() {
-        return UtilcraftWeaponsItems.SMOKE_GRENADE;
+        return UtilcraftWeaponsItems.SMOKE_GRENADE.get();
     }
 
     /**

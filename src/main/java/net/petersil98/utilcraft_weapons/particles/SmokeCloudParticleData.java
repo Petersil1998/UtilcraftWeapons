@@ -16,7 +16,7 @@ public record SmokeCloudParticleData(int color) implements ParticleOptions {
     @Nonnull
     @Override
     public ParticleType<?> getType() {
-        return UtilcraftWeaponsParticleTypes.SMOKE_CLOUD;
+        return UtilcraftWeaponsParticleTypes.SMOKE_CLOUD.get();
     }
 
     public int getColor() {
