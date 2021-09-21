@@ -38,7 +38,7 @@ public class SmokeGrenadeEntity extends ProjectileItemEntity {
     }
 
     public SmokeGrenadeEntity(World world, LivingEntity thrower, int color) {
-        super(UtilcraftWeaponsEntities.SMOKE_GRENADE_ENTITY, thrower, world);
+        super(UtilcraftWeaponsEntities.SMOKE_GRENADE_ENTITY.get(), thrower, world);
         this.getEntityData().set(COLOR_DATA, color);
         this.color = color;
     }
@@ -51,7 +51,7 @@ public class SmokeGrenadeEntity extends ProjectileItemEntity {
 
     @Nonnull
     protected Item getDefaultItem() {
-        return UtilcraftWeaponsItems.SMOKE_GRENADE;
+        return UtilcraftWeaponsItems.SMOKE_GRENADE.get();
     }
 
     /**
