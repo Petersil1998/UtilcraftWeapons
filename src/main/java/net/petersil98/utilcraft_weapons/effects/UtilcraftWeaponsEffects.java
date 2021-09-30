@@ -8,7 +8,7 @@ import net.petersil98.utilcraft_weapons.UtilcraftWeapons;
 
 public class UtilcraftWeaponsEffects {
 
-    public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, UtilcraftWeapons.MOD_ID);
+    public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, UtilcraftWeapons.MOD_ID);
 
     public static final RegistryObject<StealthEffect> STEALTH = EFFECTS.register("stealth", StealthEffect::new);
 }
